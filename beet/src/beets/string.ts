@@ -21,11 +21,9 @@ export const fixedSizeUtf8String: (
   return {
     write: function (buf: Buffer, offset: number, value: string) {
       const stringBuf = Buffer.from(value, 'utf8')
-      if (
-        stringBuf.byteLength !==
-        stringBuf.byteLength) { throw new Error(
-        `${value} has invalid byte size`
-      ) }
+      if (stringBuf.byteLength !== stringByteLength) {
+        throw new Error(`${value} has invalid byte size`)
+      }
       u32.write(buf, offset, stringByteLength)
       stringBuf.copy(buf, offset + 4, 0, stringByteLength)
     },
@@ -33,8 +31,8 @@ export const fixedSizeUtf8String: (
     read: function (buf: Buffer, offset: number): string {
       const size = u32.read(buf, offset)
       if (size !== stringByteLength) {
-  throw new Error(`invalid byte size`)
-}
+        throw new Error(`invalid byte size`)
+      }
       const stringSlice = buf.slice(offset + 4, offset + 4 + stringByteLength)
       return stringSlice.toString('utf8')
     },

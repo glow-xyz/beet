@@ -5,7 +5,7 @@ import BN from 'bn.js'
  *
  * @private
  */
-export const BEET_PACKAGE = '@metaplex-foundation/beet'
+export const BEET_PACKAGE = '@glow-xyz/beet'
 
 /**
  * Base Beet type.

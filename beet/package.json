@@ -26,7 +26,7 @@
     "doc": "rimraf ../docs/beet && typedoc",
     "doctoc": "doctoc README.md"
   },
-  "repository": "git@github.com:metaplex-foundation/beet.git",
+  "repository": "git@github.com:glow-xyz/beet.git",
   "author": "Thorsten Lorenz <thlorenz@gmx.de>",
   "license": "Apache-2.0",
   "directories": {

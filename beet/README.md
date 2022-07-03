@@ -1,4 +1,4 @@
-# @metaplex-foundation/beet
+# @glow-xyz/beet
 
 Strict borsh compatible de/serializer.
 
