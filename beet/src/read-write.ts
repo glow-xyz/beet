@@ -1,4 +1,3 @@
-import { strict as assert } from 'assert'
 import { FixedSizeBeet, FixedBeetField } from './types'
 
 /**
@@ -25,7 +24,7 @@ export class BeetWriter {
 
   private maybeResize(bytesNeeded: number) {
     if (this._offset + bytesNeeded > this.buf.length) {
-      assert.fail(
+      throw new Error(
         `We shouldn't ever need to resize, but ${
           this._offset + bytesNeeded
         } > ${this.buf.length}`

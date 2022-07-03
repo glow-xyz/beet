@@ -6,7 +6,6 @@ import {
   FixableBeet,
   Beet,
 } from '../types'
-import { strict as assert } from 'assert'
 import { u32 } from './numbers'
 import { BEET_PACKAGE } from '../types'
 import { logTrace } from '../utils'
@@ -35,11 +34,10 @@ export function uniformFixedSizeArray<T, V = Partial<T>>(
 
   return {
     write: function (buf: Buffer, offset: number, value: V[]): void {
-      assert.equal(
-        value.length,
-        len,
-        `array length ${value.length} should match len ${len}`
-      )
+      if (value.length !== len) {
+        throw Error(`array length ${value.length} should match len ${len}`)
+      }
+
       if (lenPrefix) {
         u32.write(buf, offset, len)
         offset += 4
@@ -53,7 +51,9 @@ export function uniformFixedSizeArray<T, V = Partial<T>>(
     read: function (buf: Buffer, offset: number): T[] {
       if (lenPrefix) {
         const size = u32.read(buf, offset)
-        assert.equal(size, len, 'invalid byte size')
+        if (size !== len) {
+          throw new Error('invalid byte size')
+        }
         offset += 4
       }
       const arr: T[] = new Array(len)
@@ -90,11 +90,9 @@ export function fixedSizeArray<T, V = Partial<T>>(
 
   return {
     write: function (buf: Buffer, offset: number, value: V[]): void {
-      assert.equal(
-        value.length,
-        len,
-        `array length ${value.length} should match len ${len}`
-      )
+      if (value.length !== value.length) {
+        throw new Error(`array length ${value.length} should match len ${len}`)
+      }
       u32.write(buf, offset, len)
 
       let cursor = offset + 4
@@ -107,7 +105,9 @@ export function fixedSizeArray<T, V = Partial<T>>(
 
     read: function (buf: Buffer, offset: number): T[] {
       const size = u32.read(buf, offset)
-      assert.equal(size, len, 'invalid byte size')
+      if (size !== len) {
+        throw new Error('invalid byte size')
+      }
 
       let cursor = offset + 4
       const arr: T[] = new Array(len)
@@ -155,7 +155,9 @@ export function array<T, V = Partial<T>>(
     },
 
     toFixedFromValue(vals: V[]): FixedSizeBeet<T[], V[]> {
-      assert(Array.isArray(vals), `${vals} should be an array`)
+      if (!Array.isArray(vals)) {
+        throw new Error(`${vals} should be an array`)
+      }
 
       let elementsSize = 0
       const fixedElements: FixedSizeBeet<T, V>[] = new Array(vals.length)
@@ -207,11 +209,12 @@ export function fixedSizeUint8Array(
   const byteSize = lenPrefix ? len + 4 : len
   return {
     write: function (buf: Buffer, offset: number, value: Uint8Array): void {
-      assert.equal(
-        value.byteLength,
-        len,
-        `Uint8Array length ${value.byteLength} should match len ${len}`
-      )
+      if (value.byteLength !== len) {
+        throw new Error(
+          `Uint8Array length ${value.byteLength} should match len ${len}`
+        )
+      }
+
       if (lenPrefix) {
         u32.write(buf, offset, len)
         offset += 4
@@ -222,7 +225,9 @@ export function fixedSizeUint8Array(
     read: function (buf: Buffer, offset: number): Uint8Array {
       if (lenPrefix) {
         const size = u32.read(buf, offset)
-        assert.equal(size, len, 'invalid byte size')
+        if (size !== len) {
+          throw new Error('invalid byte size')
+        }
         offset += 4
       }
       const arrayBuffer = arrayBufferBeet.read(buf, offset)

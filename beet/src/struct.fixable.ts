@@ -1,7 +1,6 @@
 import { fixBeetFromData, fixBeetFromValue } from './beet.fixable'
 import { BeetStruct } from './struct'
 import { BeetField, FixableBeet, isFixedSizeBeet } from './types'
-import { strict as assert } from 'assert'
 import { beetBytes, logDebug } from './utils'
 import colors from 'ansicolors'
 const { brightBlack } = colors
@@ -98,10 +97,11 @@ export class FixableBeetStruct<Class, Args = Partial<Class>>
 
     for (let i = 0; i < this.fields.length; i++) {
       const [key, beet] = this.fields[i]
-      assert(
-        argsKeys.includes(key),
-        `Value with keys [ ${argsKeys} ] should include struct key '${key}' but doesn't.`
-      )
+      if (!argsKeys.includes(key)) {
+        throw new Error(
+          `Value with keys [ ${argsKeys} ] should include struct key '${key}' but doesn't.`
+        )
+      }
       const val = args[key]
       const fixedBeet = fixBeetFromValue(beet, val)
       fixedFields[i] = [key, fixedBeet]

@@ -1,12 +1,11 @@
 import BN from 'bn.js'
-import { strict as assert } from 'assert'
 
 /**
  * Matches name in package.json
  *
  * @private
  */
-export const BEET_PACKAGE = '@metaplex-foundation/beet'
+export const BEET_PACKAGE = '@glow-xyz/beet'
 
 /**
  * Base Beet type.
@@ -232,7 +231,9 @@ export function assertFixedSizeBeet<T, V = Partial<T>>(
   x: Beet<T, V>,
   msg = `${x} should have been a fixed beet`
 ): asserts x is FixedSizeBeet<T, V> {
-  assert(isFixedSizeBeet(x), msg)
+  if (!isFixedSizeBeet(x)) {
+    throw new Error(msg)
+  }
 }
 
 /**
