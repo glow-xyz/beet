@@ -1,4 +1,3 @@
-import { strict as assert } from 'assert'
 import {
   assertFixedSizeBeet,
   Beet,
@@ -53,15 +52,16 @@ export function coptionNone<T>(description: string): FixedSizeBeet<COption<T>> {
   logTrace(`coptionNone(${description})`)
   return {
     write: function (buf: Buffer, offset: number, value: COption<T>) {
-      assert(value == null, 'coptionNone can only handle `null` values')
+      if (value != null) {
+        throw new Error('coptionNone can only handle `null` values')
+      }
       buf[offset] = NONE
     },
 
     read: function (buf: Buffer, offset: number): COption<T> {
-      assert(
-        isNoneBuffer(buf, offset),
-        'coptionNone can only handle `NONE` data'
-      )
+      if (!isNoneBuffer(buf, offset)) {
+        throw new Error('coptionNone can only handle `NONE` data')
+      }
       return null
     },
 
@@ -93,7 +93,9 @@ export function coptionSome<T>(
         inner,
         `coption inner type ${inner.description} needs to be fixed before calling write`
       )
-      assert(value != null, 'coptionSome cannot handle `null` values')
+      if (value == null) {
+        throw new Error('coptionSome cannot handle `null` values')
+      }
       buf[offset] = SOME
       inner.write(buf, offset + 1, value)
     },
@@ -103,10 +105,9 @@ export function coptionSome<T>(
         inner,
         `coption inner type ${inner.description} needs to be fixed before calling read`
       )
-      assert(
-        isSomeBuffer(buf, offset),
-        'coptionSome can only handle `SOME` data'
-      )
+      if (!isSomeBuffer(buf, offset)) {
+        throw new Error('coptionSome can only handle `SOME` data')
+      }
       return inner.read(buf, offset + 1)
     },
 
@@ -138,7 +139,9 @@ export function coption<T, V = T>(inner: Beet<T, V>): FixableBeet<COption<T>> {
         const innerFixed = fixBeetFromData(inner, buf, offset + 1)
         return coptionSome(innerFixed)
       } else {
-        assert(isNoneBuffer(buf, offset), `Expected ${buf} to hold a COption`)
+        if (!isNoneBuffer(buf, offset)) {
+          throw new Error(`Expected ${buf} to hold a COption`)
+        }
         return coptionNone(inner.description)
       }
     },

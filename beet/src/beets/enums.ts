@@ -8,7 +8,6 @@ import {
   SupportedTypeDefinition,
 } from '../types'
 import { u8 } from './numbers'
-import { strict as assert } from 'assert'
 import { isBeetStruct } from '../struct'
 import { isFixableBeetStruct } from '../struct.fixable'
 
@@ -37,7 +36,7 @@ export function fixedScalarEnum<T>(
       const variantKey = resolveEnumVariant(value, isNumVariant)
 
       if (!keys.includes(variantKey)) {
-        assert.fail(
+        throw new Error(
           `${value} should be a variant of the provided enum type, i.e. [ ${Object.values(
             enumType
           ).join(', ')} ], but isn't`
@@ -58,7 +57,7 @@ export function fixedScalarEnum<T>(
       const variantKey = resolveEnumVariant(value, isNumVariant)
 
       if (!keys.includes(variantKey)) {
-        assert.fail(
+        throw new Error(
           `${value} should be a of a variant of the provided enum type, i.e. [ ${Object.values(
             enumType
           ).join(', ')} ], but isn't`
@@ -177,20 +176,21 @@ export function dataEnum<T, Key extends keyof T = keyof T>(
 ) {
   for (const [_, beet] of variants) {
     // NOTE: tried to enforce this with types but failed to do so for now
-    assert(
-      isBeetStruct(beet) || isFixableBeetStruct(beet),
-      'dataEnum: data beet must be a struct'
-    )
+    const isStruct = isBeetStruct(beet) || isFixableBeetStruct(beet)
+    if (!isStruct) {
+      throw new Error('dataEnum: data beet must be a struct')
+    }
   }
 
   return {
     toFixedFromData(buf: Buffer, offset: number) {
       const discriminant = u8.read(buf, offset)
       const variant = variants[discriminant]
-      assert(
-        variant != null,
-        `Discriminant ${discriminant} out of range for ${variants.length} variants`
-      )
+      if (variant == null) {
+        throw new Error(
+          `Discriminant ${discriminant} out of range for ${variants.length} variants`
+        )
+      }
       const [__kind, dataBeet] = variant
       const fixed = isFixedSizeBeet(dataBeet)
         ? dataBeet
@@ -203,7 +203,7 @@ export function dataEnum<T, Key extends keyof T = keyof T>(
       if (val.__kind == null) {
         const keys = Object.keys(val).join(', ')
         const validKinds = variants.map(([__kind]) => __kind).join(', ')
-        assert.fail(
+        throw new Error(
           `Value with fields [ ${keys} ] is missing __kind, ` +
             `which needs to be set to one of [ ${validKinds} ]`
         )
@@ -214,7 +214,7 @@ export function dataEnum<T, Key extends keyof T = keyof T>(
       )
       if (discriminant < 0) {
         const validKinds = variants.map(([__kind]) => __kind).join(', ')
-        assert.fail(
+        throw new Error(
           `${val.__kind} is not a valid kind, needs to be one of [ ${validKinds} ]`
         )
       }

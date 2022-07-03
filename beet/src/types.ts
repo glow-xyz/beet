@@ -1,5 +1,4 @@
 import BN from 'bn.js'
-import { strict as assert } from 'assert'
 
 /**
  * Matches name in package.json
@@ -232,7 +231,9 @@ export function assertFixedSizeBeet<T, V = Partial<T>>(
   x: Beet<T, V>,
   msg = `${x} should have been a fixed beet`
 ): asserts x is FixedSizeBeet<T, V> {
-  assert(isFixedSizeBeet(x), msg)
+  if (!isFixedSizeBeet(x)) {
+    throw new Error(msg)
+  }
 }
 
 /**

@@ -5,7 +5,6 @@ import { coption } from '../../src/beets/composites'
 import { i64, u32, u8 } from '../../src/beets/numbers'
 import { bignum, FixableBeet } from '../../src/types'
 import { deepLogBeet } from '../utils'
-import { strict as assert } from 'assert'
 
 function stringifyElements(arr: any[]) {
   for (let i = 0; i < arr.length; i++) {
@@ -39,10 +38,11 @@ function verify<T, V>(
   const deserializedArgs = fixedFromData.read(data, 0)
   if (Array.isArray(args) && args.length > 0 && typeof args[0] === 'number') {
     stringifyElements(args)
-    assert(
-      Array.isArray(deserializedArgs),
-      `Assumed when args is array then ${deserializedArgs} is as well`
-    )
+    if (!Array.isArray(deserializedArgs)) {
+      throw new Error(
+        `Assumed when args is array then ${deserializedArgs} is as well`
+      )
+    }
     stringifyElements(deserializedArgs)
     t.deepEqual(deserializedArgs, args, 'round-tripped')
   } else {
