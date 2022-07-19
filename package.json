@@ -1,26 +1,65 @@
 {
+  "name": "@glow-xyz/beet",
+  "version": "0.3.0",
+  "description": "Strict borsh compatible de/serializer",
+  "sideEffects": false,
+  "main": "dist/cjs/src/beet.js",
+  "module": "dist/esm/src/beet.js",
+  "types": "dist/types/src/beet.d.ts",
+  "exports": {
+    "import": "./dist/esm/src/beet.js",
+    "require": "./dist/cjs/src/beet.js"
+  },
   "scripts": {
-    "build": "(cd ./beet && yarn build) && (cd ./beet-solana && yarn build)",
-    "postinstall": "patch-package",
-    "test:beet": "cd ./beet && yarn test && yarn test:browser",
-    "test:beet-solana": "cd ./beet-solana && yarn test",
-    "doc": "(cd ./beet && yarn doc); (cd ./beet-solana && yarn doc)",
-    "doc:update": "./sh/update-docs"
+    "check:publish-ready": "yarn build && yarn test",
+    "preversion": "yarn check:publish-ready",
+    "postversion": "git add package.json && git commit -m \"chore: update $npm_package_name to v$npm_package_version\" && git tag $npm_package_name@$npm_package_version",
+    "prepublishOnly": "yarn check:publish-ready",
+    "postpublish": "git push origin && git push origin --tags",
+    "build": "rimraf dist && tsc -p tsconfig.json && tsc -p tsconfig.esm.json",
+    "pretest": "yarn build",
+    "test": "tape dist/cjs/test/{unit,compat}/*.js",
+    "test:browser": "airtap ./test/{unit,compat}/*.ts",
+    "bsamples": "cd ../tools/bsamples && cargo run",
+    "lint": "prettier -c ./src/",
+    "lint:fix": "prettier --write ./src",
+    "tsc": "tsc --noEmit",
+    "doc": "rimraf ../docs/beet && typedoc",
+    "doc:update": "./sh/update-docs",
+    "doctoc": "doctoc README.md"
   },
-  "workspaces": {
-    "packages": [
-      "beet",
-      "beet-solana"
-    ]
+  "repository": "git@github.com:glow-xyz/beet.git",
+  "author": "Thorsten Lorenz <thlorenz@gmx.de>",
+  "license": "Apache-2.0",
+  "directories": {
+    "dist": "./dist/src"
   },
-  "author": "Metaplex Maintainers <contact@metaplex.com>",
-  "homepage": "https://metaplex.com",
-  "repository": {
-    "url": "https://github.com/metaplex/beet.git"
+  "files": [
+    "dist/esm/src/*",
+    "dist/cjs/src/*",
+    "dist/types/src/*"
+  ],
+  "dependencies": {
+    "ansicolors": "^0.3.2",
+    "bn.js": "^5.2.0",
+    "debug": "^4.3.3"
   },
-  "private": true,
-  "packageManager": "yarn@3.1.1",
   "devDependencies": {
-    "patch-package": "^6.4.7"
+    "@types/ansicolors": "^0.0.33",
+    "@types/bn.js": "^5.1.0",
+    "@types/debug": "^4.1.7",
+    "@types/tape": "^4.13.2",
+    "airtap": "^4.0.4",
+    "airtap-system": "^0.1.0",
+    "browserify": "^17.0.0",
+    "doctoc": "^2.1.0",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "spok": "^1.4.3",
+    "supports-color": "^8.1.1",
+    "tape": "^5.3.2",
+    "tsify": "^5.0.4",
+    "typedoc": "^0.22.10",
+    "typescript": "^4.5.2"
   }
 }
