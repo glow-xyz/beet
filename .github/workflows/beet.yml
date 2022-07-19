@@ -8,31 +8,22 @@ on:
 
 jobs:
   build-lint-and-test-beet:
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x]
+    runs-on: ubuntu-20.04
+    container: node:18.3.0-alpine3.14
+    env:
+      CI: true
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - uses: actions/checkout@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        fetch-depth: 1
 
-    - name: yarn install in root
-      working-directory: ./
-      run: |
-        yarn install
+    - name: Install PNPM and dependencies
+        uses: ./.github/actions/pnpm-install
 
-    - name: yarn build, lint and test
-      working-directory: ./beet
-      run: |
-        yarn run build
-        yarn run lint
-        yarn run test
-        yarn run test:browser
-      env:
-        CI: true
+    - name: Lint
+      run: pnpm run lint
+    - name: TSC
+      run: pnpm run tsc
+    - name: Test
+      run: pnpm run test
