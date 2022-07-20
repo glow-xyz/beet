@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 import {
   BEET_TYPE_ARG_LEN,
   FixedSizeBeet,

@@ -42,6 +42,7 @@
   "dependencies": {
     "ansicolors": "^0.3.2",
     "bn.js": "^5.2.0",
+    "buffer": "6.0.3",
     "debug": "^4.3.3"
   },
   "devDependencies": {
