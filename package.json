@@ -11,7 +11,7 @@
     "require": "./dist/cjs/beet.js"
   },
   "scripts": {
-    "check:publish-ready": "pnpm build && pnpm test",
+    "check:publish-ready": "pnpm build",
     "preversion": "pnpm check:publish-ready",
     "postversion": "git add package.json && git commit -m \"chore: update $npm_package_name to v$npm_package_version\" && git tag $npm_package_name@$npm_package_version",
     "prepublishOnly": "pnpm check:publish-ready",
