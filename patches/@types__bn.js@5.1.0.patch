@@ -1,0 +1,26 @@
+diff --git a/index.d.ts b/index.d.ts
+index 9feb68a383764adaa63800b1981eecfa610740b2..c9ee2d29f7b9ccdf9093f61a397ea5f4876cc31c 100644
+--- a/index.d.ts
++++ b/index.d.ts
+@@ -5,7 +5,7 @@
+ //                 Gaylor Bosson <https://github.com/Gilthoniel>
+ // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+ 
+-/// <reference types="node"/>
++import { Buffer } from "buffer";
+ 
+ declare namespace BN {
+     type Endianness = 'le' | 'be';
+diff --git a/package.json b/package.json
+index 382ecbf28cc054b3c20d2d81648bb246ea0a7a12..eae49110326f87d405d8e203acec86d10ef50418 100644
+--- a/package.json
++++ b/package.json
+@@ -29,7 +29,7 @@
+     },
+     "scripts": {},
+     "dependencies": {
+-        "@types/node": "*"
++        "buffer": "*"
+     },
+     "typesPublisherContentHash": "39142d11f35983e9b12541025ea6c418ff34ad5b8460d07d6393d244c5ed78d9",
+     "typeScriptVersion": "3.4"

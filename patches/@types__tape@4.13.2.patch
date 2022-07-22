@@ -1,0 +1,13 @@
+diff --git a/index.d.ts b/index.d.ts
+index 811a7541cc08df9601251d6adac6b3bce865850b..12bdbddb067dc2cca63a1db1a0df1f9b269a8754 100755
+--- a/index.d.ts
++++ b/index.d.ts
+@@ -8,8 +8,6 @@
+ //                 Jordan Harband <https://github.com/ljharb>
+ // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+ 
+-/// <reference types="node" />
+-
+ export = tape;
+ 
+ /**

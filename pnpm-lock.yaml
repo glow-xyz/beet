@@ -1,15 +1,25 @@
 lockfileVersion: 5.4
 
+patchedDependencies:
+  '@types/bn.js@5.1.0':
+    hash: 7o4r3icvmqa5ubypbvnrmwhqeq
+    path: patches/@types__bn.js@5.1.0.patch
+  '@types/tape@4.13.2':
+    hash: da5wegngbglptsorezxfxcdd5m
+    path: patches/@types__tape@4.13.2.patch
+
 specifiers:
   '@types/ansicolors': ^0.0.33
   '@types/bn.js': ^5.1.0
   '@types/debug': ^4.1.7
+  '@types/node': 18.0.6
   '@types/tape': ^4.13.2
   airtap: ^4.0.4
   airtap-system: ^0.1.0
   ansicolors: ^0.3.2
   bn.js: ^5.2.0
   browserify: ^17.0.0
+  buffer: 6.0.3
   debug: ^4.3.3
   doctoc: ^2.1.0
   prettier: ^2.7.1
@@ -24,13 +34,15 @@ specifiers:
 dependencies:
   ansicolors: 0.3.2
   bn.js: 5.2.1
+  buffer: 6.0.3
   debug: 4.3.4_supports-color@8.1.1
 
 devDependencies:
   '@types/ansicolors': 0.0.33
-  '@types/bn.js': 5.1.0
+  '@types/bn.js': 5.1.0_7o4r3icvmqa5ubypbvnrmwhqeq
   '@types/debug': 4.1.7
-  '@types/tape': 4.13.2
+  '@types/node': 18.0.6
+  '@types/tape': 4.13.2_da5wegngbglptsorezxfxcdd5m
   airtap: 4.0.4_supports-color@8.1.1
   airtap-system: 0.1.0_supports-color@8.1.1
   browserify: 17.0.0
@@ -348,11 +360,12 @@ packages:
     resolution: {integrity: sha512-dVS1WW/BqYdwbv1H0Cgpq8ChV4VowUXz+R7pYKGEHhF+mdg/MibuE+6Et/GBxg6nfKKFVf2ZsQkyr7XNR2SqxA==}
     dev: true
 
-  /@types/bn.js/5.1.0:
+  /@types/bn.js/5.1.0_7o4r3icvmqa5ubypbvnrmwhqeq:
     resolution: {integrity: sha512-QSSVYj7pYFN49kW77o2s9xTCwZ8F2xLbjLLSEVh8D2F4JUhZtPAGOFLTD+ffqksBx/u4cE/KImFjyhqCjn/LIA==}
     dependencies:
-      '@types/node': 14.18.21
+      '@types/node': 18.0.6
     dev: true
+    patched: true
 
   /@types/cookie/0.4.1:
     resolution: {integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==}
@@ -378,15 +391,16 @@ packages:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: true
 
-  /@types/node/14.18.21:
-    resolution: {integrity: sha512-x5W9s+8P4XteaxT/jKF0PSb7XEvo5VmqEWgsMlyeY4ZlLK8I6aH6g5TPPyDlLAep+GYf4kefb7HFyc7PAO3m+Q==}
+  /@types/node/18.0.6:
+    resolution: {integrity: sha512-/xUq6H2aQm261exT6iZTMifUySEt4GR5KX8eYyY+C4MSNPqSh9oNIP7tz2GLKTlFaiBbgZNxffoR3CVRG+cljw==}
     dev: true
 
-  /@types/tape/4.13.2:
+  /@types/tape/4.13.2_da5wegngbglptsorezxfxcdd5m:
     resolution: {integrity: sha512-V1ez/RtYRGN9cNYApw5xf27DpMkTB0033X6a2i3KUmKhSojBfbWN0i3EgZxboUG96WJLHLdOyZ01aiZwVW5aSA==}
     dependencies:
-      '@types/node': 14.18.21
+      '@types/node': 18.0.6
     dev: true
+    patched: true
 
   /@types/unist/2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
@@ -666,7 +680,6 @@ packages:
 
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
-    dev: true
 
   /base64id/2.0.0:
     resolution: {integrity: sha512-lGe34o6EHj9y3Kts9R4ZYs/Gr+6N7MCaMlIFA3F1R2O5/m7K06AxfSeO5530PEERE6/WyEg3lsuyw4GHlPZHog==}
@@ -1001,6 +1014,13 @@ packages:
       base64-js: 1.5.1
       ieee754: 1.2.1
     dev: true
+
+  /buffer/6.0.3:
+    resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
+    dependencies:
+      base64-js: 1.5.1
+      ieee754: 1.2.1
+    dev: false
 
   /builtin-status-codes/3.0.0:
     resolution: {integrity: sha512-HpGFw18DgFWlncDfjTa2rcQ4W88O1mC8e8yZ2AvQY5KDaktSTwo+KRf6nHK6FRI5FyRyb/5T6+TSxfP7QyGsmQ==}
@@ -1586,7 +1606,7 @@ packages:
     dependencies:
       '@types/cookie': 0.4.1
       '@types/cors': 2.8.12
-      '@types/node': 14.18.21
+      '@types/node': 18.0.6
       accepts: 1.3.8
       base64id: 2.0.0
       cookie: 0.4.2
@@ -2189,7 +2209,6 @@ packages:
 
   /ieee754/1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
-    dev: true
 
   /ignore/5.2.0:
     resolution: {integrity: sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==}

@@ -1,4 +1,5 @@
 import BN from 'bn.js'
+import { Buffer } from 'buffer'
 import { bignum, SupportedTypeDefinition, FixedSizeBeet } from '../types'
 import { BEET_PACKAGE } from '../types'
 
