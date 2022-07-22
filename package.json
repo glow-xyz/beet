@@ -11,22 +11,18 @@
     "require": "./dist/cjs/src/beet.js"
   },
   "scripts": {
-    "check:publish-ready": "yarn build && yarn test",
-    "preversion": "yarn check:publish-ready",
+    "check:publish-ready": "pnpm build && pnpm test",
+    "preversion": "pnpm check:publish-ready",
     "postversion": "git add package.json && git commit -m \"chore: update $npm_package_name to v$npm_package_version\" && git tag $npm_package_name@$npm_package_version",
-    "prepublishOnly": "yarn check:publish-ready",
+    "prepublishOnly": "pnpm check:publish-ready",
     "postpublish": "git push origin && git push origin --tags",
     "build": "rimraf dist && tsc -p tsconfig.json && tsc -p tsconfig.esm.json",
     "pretest": "yarn build",
-    "test": "tape dist/cjs/test/{unit,compat}/*.js",
-    "test:browser": "airtap ./test/{unit,compat}/*.ts",
+    "test": "tape ./test/{unit,compat}/*.ts",
     "bsamples": "cd ../tools/bsamples && cargo run",
     "lint": "prettier -c ./src/",
     "lint:fix": "prettier --write ./src",
-    "tsc": "tsc --noEmit",
-    "doc": "rimraf ../docs/beet && typedoc",
-    "doc:update": "./sh/update-docs",
-    "doctoc": "doctoc README.md"
+    "tsc": "tsc --noEmit"
   },
   "repository": "git@github.com:glow-xyz/beet.git",
   "author": "Thorsten Lorenz <thlorenz@gmx.de>",
