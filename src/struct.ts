@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 import { BeetReader, BeetWriter } from './read-write'
 import { FixedBeetField, ScalarFixedSizeBeet } from './types'
 import { beetBytes, logDebug, logTrace } from './utils'

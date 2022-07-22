@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2018",
+    "target": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
     "declarationMap": false,
@@ -9,6 +9,8 @@
     "emitDeclarationOnly": false,
     "importHelpers": false,
     "strict": true,
+    "lib": ["esnext"],
+    "types": [],
     "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,

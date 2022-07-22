@@ -7,5 +7,5 @@
     "declarationDir": null,
     "declaration": false
   },
-  "include": ["src", "test"]
+  "include": ["src"]
 }

@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 import { fixBeetFromData, fixBeetFromValue } from './beet.fixable'
 import { BeetStruct } from './struct'
 import { BeetField, FixableBeet, isFixedSizeBeet } from './types'

@@ -1,3 +1,4 @@
+import { Buffer } from 'buffer'
 import { Beet, isFixableBeet, isFixedSizeBeet } from './types'
 
 /**
