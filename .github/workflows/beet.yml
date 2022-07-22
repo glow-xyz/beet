@@ -19,7 +19,7 @@ jobs:
         fetch-depth: 1
 
     - name: Install PNPM and dependencies
-        uses: ./.github/actions/pnpm-install
+      uses: ./.github/actions/pnpm-install
 
     - name: Lint
       run: pnpm run lint
