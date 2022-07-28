@@ -19,7 +19,7 @@ specifiers:
   ansicolors: ^0.3.2
   bn.js: ^5.2.0
   browserify: ^17.0.0
-  buffer: 6.0.3
+  buffer: ^6.0.3
   debug: ^4.3.3
   doctoc: ^2.1.0
   prettier: ^2.7.1
