@@ -20,8 +20,9 @@ jobs:
 
     - name: Install PNPM and dependencies
       uses: ./.github/actions/pnpm-install
-
+    - name: Install PNPM and dependencies
+      run: npm i pnpm@7.4.0 -g && pnpm install
     - name: TSC
       run: pnpm run tsc
     - name: Test
-      run: pnpm run test
+      run: pnpm run tsc -p tsconfig.test.json && pnpm run test
