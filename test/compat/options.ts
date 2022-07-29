@@ -1,4 +1,5 @@
 import test from 'tape'
+import { Buffer } from 'buffer'
 import { coption, u8, utf8String } from '../../src/beet'
 import { checkFixedSerialization } from '../utils'
 import fixture from './fixtures/options.json'

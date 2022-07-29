@@ -6,6 +6,7 @@ import {
   checkFixedSerialize,
 } from '../utils'
 import fixture from './fixtures/enums.json'
+import { Buffer } from 'buffer'
 
 enum Directions {
   Up,
