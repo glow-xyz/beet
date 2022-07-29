@@ -1,0 +1,4 @@
+browserify:
+  - plugin:
+    - tsify
+    - project: "tsconfig.test.json"
