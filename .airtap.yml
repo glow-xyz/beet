@@ -1,4 +1,9 @@
 browserify:
+  - options:
+      insertGlobalVars: []
+      builtins: ["util", "_process", "buffer", "stream", "events", "timers", "fs", "path"]
+
+
   - plugin:
     - tsify
     - project: "tsconfig.test.json"

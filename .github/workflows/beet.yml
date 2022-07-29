@@ -2,9 +2,9 @@ name: Build Lint and Test Beet
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build-lint-and-test-beet:
@@ -14,13 +14,15 @@ jobs:
       CI: true
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 1
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
 
-    - name: Install PNPM and dependencies
-      run: apk update && apk add python3 g++ make && rm -rf /var/cache/apk/* && npm i pnpm@7.4.0 -g && pnpm install
-    - name: TSC
-      run: pnpm run tsc
-    - name: Test
-      run: pnpm run test
+      - name: Install PNPM and dependencies
+        run: apk update && apk add python3 g++ make && rm -rf /var/cache/apk/* && npm i pnpm@7.4.0 -g && pnpm install
+      - name: TSC
+        run: pnpm run tsc
+      - name: Test in Node.js
+        run: pnpm run test
+      - name: Test in browser environment
+        run: pnpm run test:browser

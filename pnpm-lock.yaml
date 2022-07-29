@@ -29,6 +29,7 @@ specifiers:
   tsify: ^5.0.4
   typedoc: ^0.22.10
   typescript: ^4.5.2
+  util: ^0.12.4
 
 dependencies:
   ansicolors: 0.3.2
@@ -53,6 +54,7 @@ devDependencies:
   tsify: 5.0.4_brov7mothvcejnwzylwtltjfwe
   typedoc: 0.22.18_typescript@4.7.4
   typescript: 4.7.4
+  util: 0.12.4
 
 packages:
 

@@ -1,10 +1,10 @@
 import { Buffer } from "buffer";
 import test from "tape";
-import { inspect } from "util";
+// import { inspect } from "util";
 import { Beet, FixableBeet, FixedSizeBeet } from "../../src/beet";
 
 export function deepLog(obj: any) {
-  console.log(inspect(obj, { depth: 15, colors: true, getters: true }));
+  // console.log(inspect(obj, { depth: 15, colors: true, getters: true }));
 }
 
 export function deepLogBeet(struct: Beet<any, any>) {
