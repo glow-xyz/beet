@@ -1,12 +1,10 @@
 import debug from "debug";
-import colors from "ansicolors";
 import {
   FixableBeet,
   FixedSizeBeet,
   isElementCollectionFixedSizeBeet,
   isFixableBeet,
 } from "./types";
-const { brightBlack } = colors;
 
 export const logError = debug("beet:error");
 export const logInfo = debug("beet:info");
@@ -30,9 +28,9 @@ export function beetBytes<T, V = Partial<T>>(
   } else {
     bytes = `${beet.byteSize} B`;
   }
-  return brightBlack(bytes);
+  return bytes;
 }
 
 export function bytes(n: number) {
-  return brightBlack(`${n} B`);
+  return `${n} B`;
 }

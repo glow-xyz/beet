@@ -32,13 +32,11 @@
     "dist/types/*"
   ],
   "dependencies": {
-    "ansicolors": "^0.3.2",
     "bn.js": "^5.2.0",
     "buffer": "^6.0.3",
     "debug": "^4.3.3"
   },
   "devDependencies": {
-    "@types/ansicolors": "^0.0.33",
     "@types/bn.js": "^5.1.0",
     "@types/debug": "^4.1.7",
     "@types/node": "^18.6.2",

@@ -3,8 +3,6 @@ import { fixBeetFromData, fixBeetFromValue } from "./beet.fixable";
 import { BeetStruct } from "./struct";
 import { BeetField, FixableBeet, isFixedSizeBeet } from "./types";
 import { beetBytes, logDebug } from "./utils";
-import colors from "ansicolors";
-const { brightBlack } = colors;
 
 /**
  * Configures a class or any JavaScript object type for de/serialization aka
@@ -45,7 +43,7 @@ export class FixableBeetStruct<Class, Args = Partial<Class>>
         })
         .join("\n  ");
       const bytes = `> ${minByteSize} B`;
-      logDebug(`struct ${description} {\n  ${flds}\n} ${brightBlack(bytes)}`);
+      logDebug(`struct ${description} {\n  ${flds}\n} ${bytes}`);
     }
   }
 
