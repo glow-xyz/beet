@@ -21,8 +21,6 @@
     "test": "NODE_OPTIONS='--loader ts-node/esm/transpile-only' tape ./test/{unit,compat}/*.ts",
     "test:browser": "airtap ./test/{unit,compat}/*.ts",
     "bsamples": "cd ../tools/bsamples && cargo run",
-    "lint": "prettier -c ./src/",
-    "lint:fix": "prettier --write ./src",
     "tsc": "tsc --noEmit",
     "doc": "rimraf ../docs/beet && typedoc",
     "doc:update": "./sh/update-docs",
