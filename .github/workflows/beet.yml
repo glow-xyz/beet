@@ -21,7 +21,7 @@ jobs:
     - name: Install PNPM and dependencies
       uses: ./.github/actions/pnpm-install
     - name: Install PNPM and dependencies
-      run: npm i pnpm@7.4.0 -g && pnpm install
+      run: apk update && apk add python3 g++ make && rm -rf /var/cache/apk/* && npm i pnpm@7.4.0 -g && pnpm install
     - name: TSC
       run: pnpm run tsc
     - name: Test
