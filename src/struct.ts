@@ -1,7 +1,7 @@
-import { Buffer } from 'buffer'
-import { BeetReader, BeetWriter } from './read-write'
-import { FixedBeetField, ScalarFixedSizeBeet } from './types'
-import { beetBytes, logDebug, logTrace } from './utils'
+import { Buffer } from "buffer";
+import { BeetReader, BeetWriter } from "./read-write";
+import { FixedBeetField, ScalarFixedSizeBeet } from "./types";
+import { beetBytes, logDebug, logTrace } from "./utils";
 
 /**
  * Configures a class or any JavaScript object type for de/serialization aka
@@ -18,7 +18,7 @@ import { beetBytes, logDebug, logTrace } from './utils'
 export class BeetStruct<Class, Args = Partial<Class>>
   implements ScalarFixedSizeBeet<Class>
 {
-  readonly byteSize: number
+  readonly byteSize: number;
   /**
    * Creates an instance of the BeetStruct.
    *
@@ -33,15 +33,15 @@ export class BeetStruct<Class, Args = Partial<Class>>
     private readonly construct: (args: Args) => Class,
     readonly description = BeetStruct.description
   ) {
-    this.byteSize = this.getByteSize()
+    this.byteSize = this.getByteSize();
     if (logDebug.enabled) {
       const flds = fields
         .map(
           ([key, val]: FixedBeetField<Args>) =>
             `${String(key)}: ${val.description} ${beetBytes(val)}`
         )
-        .join('\n  ')
-      logDebug(`struct ${description} {\n  ${flds}\n} ${beetBytes(this)}`)
+        .join("\n  ");
+      logDebug(`struct ${description} {\n  ${flds}\n} ${beetBytes(this)}`);
     }
   }
 
@@ -51,8 +51,8 @@ export class BeetStruct<Class, Args = Partial<Class>>
    * @private
    */
   read(buf: Buffer, offset: number): Class {
-    const [value] = this.deserialize(buf, offset)
-    return value
+    const [value] = this.deserialize(buf, offset);
+    return value;
   }
 
   /**
@@ -61,8 +61,8 @@ export class BeetStruct<Class, Args = Partial<Class>>
    * @private
    */
   write(buf: Buffer, offset: number, value: Args): void {
-    const [innerBuf, innerOffset] = this.serialize(value)
-    innerBuf.copy(buf, offset, 0, innerOffset)
+    const [innerBuf, innerOffset] = this.serialize(value);
+    innerBuf.copy(buf, offset, 0, innerOffset);
   }
 
   /**
@@ -74,16 +74,16 @@ export class BeetStruct<Class, Args = Partial<Class>>
   deserialize(buffer: Buffer, offset: number = 0): [Class, number] {
     if (logTrace.enabled) {
       logTrace(
-        'deserializing [%s] from %d bytes buffer',
+        "deserializing [%s] from %d bytes buffer",
         this.description,
         buffer.byteLength
-      )
-      logTrace(buffer)
-      logTrace(buffer.toJSON().data)
+      );
+      logTrace(buffer);
+      logTrace(buffer.toJSON().data);
     }
-    const reader = new BeetReader(buffer, offset)
-    const args = reader.readStruct(this.fields)
-    return [this.construct(args), reader.offset]
+    const reader = new BeetReader(buffer, offset);
+    const args = reader.readStruct(this.fields);
+    return [this.construct(args), reader.offset];
   }
 
   /**
@@ -95,31 +95,31 @@ export class BeetStruct<Class, Args = Partial<Class>>
    */
   serialize(instance: Args, byteSize = this.byteSize): [Buffer, number] {
     logTrace(
-      'serializing [%s] %o to %d bytes buffer',
+      "serializing [%s] %o to %d bytes buffer",
       this.description,
       instance,
       byteSize
-    )
-    const writer = new BeetWriter(byteSize)
-    writer.writeStruct(instance, this.fields)
-    return [writer.buffer, writer.offset]
+    );
+    const writer = new BeetWriter(byteSize);
+    writer.writeStruct(instance, this.fields);
+    return [writer.buffer, writer.offset];
   }
 
   private getByteSize() {
-    return this.fields.reduce((acc, [_, beet]) => acc + beet.byteSize, 0)
+    return this.fields.reduce((acc, [_, beet]) => acc + beet.byteSize, 0);
   }
 
-  static description = 'BeetStruct'
+  static description = "BeetStruct";
 
-  static TYPE = 'BeetStruct'
+  static TYPE = "BeetStruct";
 
   get type() {
-    return BeetStruct.TYPE
+    return BeetStruct.TYPE;
   }
 }
 
 export function isBeetStruct(beet: any): beet is BeetStruct<any, any> {
-  return beet.type === BeetStruct.TYPE
+  return beet.type === BeetStruct.TYPE;
 }
 
 /**
@@ -133,8 +133,8 @@ export class BeetArgsStruct<Args> extends BeetStruct<Args, Args> {
     fields: FixedBeetField<Args>[],
     description: string = BeetArgsStruct.description
   ) {
-    super(fields, (args) => args, description)
+    super(fields, (args) => args, description);
   }
 
-  static description = 'BeetArgsStruct'
+  static description = "BeetArgsStruct";
 }

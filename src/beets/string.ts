@@ -1,13 +1,13 @@
-import { Buffer } from 'buffer'
+import { Buffer } from "buffer";
 import {
   FixedSizeBeet,
   FixableBeet,
   SupportedTypeDefinition,
   BEET_PACKAGE,
   BEET_TYPE_ARG_LEN,
-} from '../types'
-import { u32 } from './numbers'
-import { logTrace } from '../utils'
+} from "../types";
+import { u32 } from "./numbers";
+import { logTrace } from "../utils";
 
 /**
  * De/Serializes a UTF8 string of a particular size.
@@ -21,29 +21,29 @@ export const fixedSizeUtf8String: (
 ) => FixedSizeBeet<string, string> = (stringByteLength: number) => {
   return {
     write: function (buf: Buffer, offset: number, value: string) {
-      const stringBuf = Buffer.from(value, 'utf8')
+      const stringBuf = Buffer.from(value, "utf8");
       if (stringBuf.byteLength !== stringByteLength) {
-        throw new Error(`${value} has invalid byte size`)
+        throw new Error(`${value} has invalid byte size`);
       }
-      u32.write(buf, offset, stringByteLength)
-      stringBuf.copy(buf, offset + 4, 0, stringByteLength)
+      u32.write(buf, offset, stringByteLength);
+      stringBuf.copy(buf, offset + 4, 0, stringByteLength);
     },
 
     read: function (buf: Buffer, offset: number): string {
-      const size = u32.read(buf, offset)
+      const size = u32.read(buf, offset);
       if (size !== stringByteLength) {
-        throw new Error(`invalid byte size`)
+        throw new Error(`invalid byte size`);
       }
-      const stringSlice = buf.slice(offset + 4, offset + 4 + stringByteLength)
-      return stringSlice.toString('utf8')
+      const stringSlice = buf.slice(offset + 4, offset + 4 + stringByteLength);
+      return stringSlice.toString("utf8");
     },
     elementByteSize: 1,
     length: stringByteLength,
     lenPrefixByteSize: 4,
     byteSize: 4 + stringByteLength,
     description: `Utf8String(4 + ${stringByteLength})`,
-  }
-}
+  };
+};
 
 /**
  * De/Serializes a UTF8 string of any size.
@@ -52,34 +52,34 @@ export const fixedSizeUtf8String: (
  */
 export const utf8String: FixableBeet<string, string> = {
   toFixedFromData(buf: Buffer, offset: number): FixedSizeBeet<string, string> {
-    const len = u32.read(buf, offset)
-    logTrace(`${this.description}[${len}]`)
-    return fixedSizeUtf8String(len)
+    const len = u32.read(buf, offset);
+    logTrace(`${this.description}[${len}]`);
+    return fixedSizeUtf8String(len);
   },
 
   toFixedFromValue(val: string): FixedSizeBeet<string, string> {
-    const len = Buffer.from(val).byteLength
-    return fixedSizeUtf8String(len)
+    const len = Buffer.from(val).byteLength;
+    return fixedSizeUtf8String(len);
   },
 
   description: `Utf8String`,
-}
+};
 
 /**
  * @category TypeDefinition
  */
-export type StringExports = keyof typeof import('./string')
+export type StringExports = keyof typeof import("./string");
 /**
  * @category TypeDefinition
  */
-export type StringTypeMapKey = 'string' | 'fixedSizeString'
+export type StringTypeMapKey = "string" | "fixedSizeString";
 /**
  * @category TypeDefinition
  */
 export type StringTypeMap = Record<
   StringTypeMapKey,
   SupportedTypeDefinition & { beet: StringExports }
->
+>;
 
 /**
  * Maps string beet exports to metadata which describes in which package it
@@ -90,16 +90,16 @@ export type StringTypeMap = Record<
  */
 export const stringTypeMap: StringTypeMap = {
   fixedSizeString: {
-    beet: 'fixedSizeUtf8String',
+    beet: "fixedSizeUtf8String",
     isFixable: false,
     sourcePack: BEET_PACKAGE,
-    ts: 'string',
+    ts: "string",
     arg: BEET_TYPE_ARG_LEN,
   },
   string: {
-    beet: 'utf8String',
+    beet: "utf8String",
     isFixable: true,
     sourcePack: BEET_PACKAGE,
-    ts: 'string',
+    ts: "string",
   },
-}
+};

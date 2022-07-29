@@ -22,7 +22,6 @@ specifiers:
   buffer: ^6.0.3
   debug: ^4.3.3
   doctoc: ^2.1.0
-  prettier: ^2.7.1
   rimraf: ^3.0.2
   spok: ^1.4.3
   supports-color: ^8.1.1
@@ -47,7 +46,6 @@ devDependencies:
   airtap-system: 0.1.0_supports-color@8.1.1
   browserify: 17.0.0
   doctoc: 2.2.0_supports-color@8.1.1
-  prettier: 2.7.1
   rimraf: 3.0.2
   spok: 1.4.3
   supports-color: 8.1.1
@@ -3348,12 +3346,6 @@ packages:
       tar-fs: 2.1.1
       tunnel-agent: 0.6.0
       which-pm-runs: 1.1.0
-    dev: true
-
-  /prettier/2.7.1:
-    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
     dev: true
 
   /process-nextick-args/2.0.1:

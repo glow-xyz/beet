@@ -1,38 +1,38 @@
-import { SupportedTypeDefinition } from './types'
+import { SupportedTypeDefinition } from "./types";
 import {
   CollectionsExports,
   collectionsTypeMap,
   CollectionsTypeMapKey,
-} from './beets/collections'
+} from "./beets/collections";
 import {
   CompositesExports,
   compositesTypeMap,
   CompositesTypeMapKey,
-} from './beets/composites'
+} from "./beets/composites";
 import {
   NumbersExports,
   numbersTypeMap,
   NumbersTypeMapKey,
-} from './beets/numbers'
-import { StringExports, stringTypeMap, StringTypeMapKey } from './beets/string'
-import { EnumsExports, enumsTypeMap, EnumsTypeMapKey } from './beets/enums'
+} from "./beets/numbers";
+import { StringExports, stringTypeMap, StringTypeMapKey } from "./beets/string";
+import { EnumsExports, enumsTypeMap, EnumsTypeMapKey } from "./beets/enums";
 import {
   AliasesExports,
   aliasesTypeMap,
   AliasesTypeMapKey,
-} from './beets/aliases'
+} from "./beets/aliases";
 
-export * from './beets/aliases'
-export * from './beets/collections'
-export * from './beets/string'
-export * from './beets/composites'
-export * from './beets/enums'
-export * from './beets/numbers'
-export * from './beet.fixable'
-export * from './read-write'
-export * from './struct'
-export * from './struct.fixable'
-export * from './types'
+export * from "./beets/aliases";
+export * from "./beets/collections";
+export * from "./beets/string";
+export * from "./beets/composites";
+export * from "./beets/enums";
+export * from "./beets/numbers";
+export * from "./beet.fixable";
+export * from "./read-write";
+export * from "./struct";
+export * from "./struct.fixable";
+export * from "./types";
 
 /**
  * @category TypeDefinition
@@ -43,7 +43,7 @@ export type BeetTypeMapKey =
   | CompositesTypeMapKey
   | EnumsTypeMapKey
   | NumbersTypeMapKey
-  | AliasesTypeMapKey
+  | AliasesTypeMapKey;
 
 /**
  * @category TypeDefinition
@@ -54,7 +54,7 @@ export type BeetExports =
   | CompositesExports
   | EnumsExports
   | NumbersExports
-  | AliasesExports
+  | AliasesExports;
 
 /**
  * Maps all {@link Beet} de/serializers to metadata which describes in which
@@ -66,7 +66,7 @@ export type BeetExports =
 export const supportedTypeMap: Record<
   BeetTypeMapKey,
   SupportedTypeDefinition & {
-    beet: BeetExports
+    beet: BeetExports;
   }
 > = {
   ...collectionsTypeMap,
@@ -75,4 +75,4 @@ export const supportedTypeMap: Record<
   ...enumsTypeMap,
   ...numbersTypeMap,
   ...aliasesTypeMap,
-}
+};

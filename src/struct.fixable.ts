@@ -1,10 +1,10 @@
-import { Buffer } from 'buffer'
-import { fixBeetFromData, fixBeetFromValue } from './beet.fixable'
-import { BeetStruct } from './struct'
-import { BeetField, FixableBeet, isFixedSizeBeet } from './types'
-import { beetBytes, logDebug } from './utils'
-import colors from 'ansicolors'
-const { brightBlack } = colors
+import { Buffer } from "buffer";
+import { fixBeetFromData, fixBeetFromValue } from "./beet.fixable";
+import { BeetStruct } from "./struct";
+import { BeetField, FixableBeet, isFixedSizeBeet } from "./types";
+import { beetBytes, logDebug } from "./utils";
+import colors from "ansicolors";
+const { brightBlack } = colors;
 
 /**
  * Configures a class or any JavaScript object type for de/serialization aka
@@ -34,18 +34,18 @@ export class FixableBeetStruct<Class, Args = Partial<Class>>
     private readonly construct: (args: Args) => Class,
     readonly description = FixableBeetStruct.description
   ) {
-    let minByteSize = 0
+    let minByteSize = 0;
     if (logDebug.enabled) {
       const flds = fields
         .map(([key, val]: BeetField<Args, any>) => {
           if (isFixedSizeBeet(val)) {
-            minByteSize += val.byteSize
+            minByteSize += val.byteSize;
           }
-          return `${key}: ${val.description} ${beetBytes(val)}`
+          return `${key}: ${val.description} ${beetBytes(val)}`;
         })
-        .join('\n  ')
-      const bytes = `> ${minByteSize} B`
-      logDebug(`struct ${description} {\n  ${flds}\n} ${brightBlack(bytes)}`)
+        .join("\n  ");
+      const bytes = `> ${minByteSize} B`;
+      logDebug(`struct ${description} {\n  ${flds}\n} ${brightBlack(bytes)}`);
     }
   }
 
@@ -56,7 +56,7 @@ export class FixableBeetStruct<Class, Args = Partial<Class>>
    * @returns `[instance of Class, offset into buffer after deserialization completed]`
    */
   deserialize(buffer: Buffer, offset: number = 0): [Class, number] {
-    return this.toFixedFromData(buffer, offset).deserialize(buffer, offset)
+    return this.toFixedFromData(buffer, offset).deserialize(buffer, offset);
   }
 
   /**
@@ -73,59 +73,59 @@ export class FixableBeetStruct<Class, Args = Partial<Class>>
    * defaults to the size of the struct to serialize
    */
   serialize(instance: Args, byteSize?: number): [Buffer, number] {
-    return this.toFixedFromValue(instance).serialize(instance, byteSize)
+    return this.toFixedFromValue(instance).serialize(instance, byteSize);
   }
 
   toFixedFromData(buf: Buffer, offset: number): BeetStruct<Class, Args> {
-    let cursor = offset
-    const fixedFields = new Array(this.fields.length)
+    let cursor = offset;
+    const fixedFields = new Array(this.fields.length);
 
     for (let i = 0; i < this.fields.length; i++) {
-      const [key, beet] = this.fields[i]
-      const fixedBeet = fixBeetFromData(beet, buf, cursor)
-      fixedFields[i] = [key, fixedBeet]
-      cursor += fixedBeet.byteSize
+      const [key, beet] = this.fields[i];
+      const fixedBeet = fixBeetFromData(beet, buf, cursor);
+      fixedFields[i] = [key, fixedBeet];
+      cursor += fixedBeet.byteSize;
     }
 
     return this.description !== FixableBeetStruct.description
       ? new BeetStruct(fixedFields, this.construct, this.description)
-      : new BeetStruct(fixedFields, this.construct)
+      : new BeetStruct(fixedFields, this.construct);
   }
 
   toFixedFromValue(args: Args): BeetStruct<Class, Args> {
-    const argsKeys = Object.keys(args)
-    const fixedFields = new Array(this.fields.length)
+    const argsKeys = Object.keys(args);
+    const fixedFields = new Array(this.fields.length);
 
     for (let i = 0; i < this.fields.length; i++) {
-      const [key, beet] = this.fields[i]
+      const [key, beet] = this.fields[i];
       if (!argsKeys.includes(key)) {
         throw new Error(
           `Value with keys [ ${argsKeys} ] should include struct key '${key}' but doesn't.`
-        )
+        );
       }
-      const val = args[key]
-      const fixedBeet = fixBeetFromValue(beet, val)
-      fixedFields[i] = [key, fixedBeet]
+      const val = args[key];
+      const fixedBeet = fixBeetFromValue(beet, val);
+      fixedFields[i] = [key, fixedBeet];
     }
 
     return this.description !== FixableBeetStruct.description
       ? new BeetStruct(fixedFields, this.construct, this.description)
-      : new BeetStruct(fixedFields, this.construct)
+      : new BeetStruct(fixedFields, this.construct);
   }
 
-  static description = 'FixableBeetStruct'
+  static description = "FixableBeetStruct";
 
-  static TYPE = 'FixableBeetStruct'
+  static TYPE = "FixableBeetStruct";
 
   get type() {
-    return FixableBeetStruct.TYPE
+    return FixableBeetStruct.TYPE;
   }
 }
 
 export function isFixableBeetStruct(
   beet: any
 ): beet is FixableBeetStruct<any, any> {
-  return beet.type === FixableBeetStruct.TYPE
+  return beet.type === FixableBeetStruct.TYPE;
 }
 
 /**
@@ -139,8 +139,8 @@ export class FixableBeetArgsStruct<Args> extends FixableBeetStruct<Args, Args> {
     fields: BeetField<Args, any>[],
     description: string = FixableBeetArgsStruct.description
   ) {
-    super(fields, (args) => args, description)
+    super(fields, (args) => args, description);
   }
 
-  static description = 'FixableBeetArgsStruct'
+  static description = "FixableBeetArgsStruct";
 }

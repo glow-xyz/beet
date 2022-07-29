@@ -1,7 +1,7 @@
-import BN from 'bn.js'
-import { Buffer } from 'buffer'
-import { bignum, SupportedTypeDefinition, FixedSizeBeet } from '../types'
-import { BEET_PACKAGE } from '../types'
+import BN from "bn.js";
+import { Buffer } from "buffer";
+import { bignum, SupportedTypeDefinition, FixedSizeBeet } from "../types";
+import { BEET_PACKAGE } from "../types";
 
 // -----------------
 // Unsigned
@@ -14,14 +14,14 @@ import { BEET_PACKAGE } from '../types'
  */
 export const u8: FixedSizeBeet<number> = {
   write: function (buf: Buffer, offset: number, value: number) {
-    buf.writeUInt8(value, offset)
+    buf.writeUInt8(value, offset);
   },
   read: function (buf: Buffer, offset: number): number {
-    return buf.readUInt8(offset)
+    return buf.readUInt8(offset);
   },
   byteSize: 1,
-  description: 'u8',
-}
+  description: "u8",
+};
 
 /**
  * De/Serializer 16-bit unsigned integers aka `u16`.
@@ -30,14 +30,14 @@ export const u8: FixedSizeBeet<number> = {
  */
 export const u16: FixedSizeBeet<number> = {
   write: function (buf: Buffer, offset: number, value: number) {
-    buf.writeUInt16LE(value, offset)
+    buf.writeUInt16LE(value, offset);
   },
   read: function (buf: Buffer, offset: number): number {
-    return buf.readUInt16LE(offset)
+    return buf.readUInt16LE(offset);
   },
   byteSize: 2,
-  description: 'u16',
-}
+  description: "u16",
+};
 
 /**
  * De/Serializer for 32-bit unsigned integers aka `u32`.
@@ -46,30 +46,30 @@ export const u16: FixedSizeBeet<number> = {
  */
 export const u32: FixedSizeBeet<number> = {
   write: function (buf: Buffer, offset: number, value: number) {
-    buf.writeUInt32LE(value, offset)
+    buf.writeUInt32LE(value, offset);
   },
   read: function (buf: Buffer, offset: number): number {
-    return buf.readUInt32LE(offset)
+    return buf.readUInt32LE(offset);
   },
   byteSize: 4,
-  description: 'u32',
-}
+  description: "u32",
+};
 
 function unsignedLargeBeet(byteSize: number, description: string) {
   return {
     write: function (buf: Buffer, offset: number, value: bignum) {
-      const bn = BN.isBN(value) ? value : new BN(value)
-      const bytesArray = bn.toArray('le', this.byteSize)
-      const bytesArrayBuf = Buffer.from(bytesArray)
-      bytesArrayBuf.copy(buf, offset, 0, this.byteSize)
+      const bn = BN.isBN(value) ? value : new BN(value);
+      const bytesArray = bn.toArray("le", this.byteSize);
+      const bytesArrayBuf = Buffer.from(bytesArray);
+      bytesArrayBuf.copy(buf, offset, 0, this.byteSize);
     },
     read: function (buf: Buffer, offset: number): bignum {
-      const slice = buf.slice(offset, offset + this.byteSize)
-      return new BN(slice, 'le')
+      const slice = buf.slice(offset, offset + this.byteSize);
+      return new BN(slice, "le");
     },
     byteSize,
     description,
-  }
+  };
 }
 
 /**
@@ -78,28 +78,28 @@ function unsignedLargeBeet(byteSize: number, description: string) {
  *
  * @category beet/primitive
  */
-export const u64: FixedSizeBeet<bignum> = unsignedLargeBeet(8, 'u64')
+export const u64: FixedSizeBeet<bignum> = unsignedLargeBeet(8, "u64");
 /**
  * De/Serializer for 128-bit unsigned integers aka `u128` which serializes to a JavaScript
  * _BigNum_ via {@link https://github.com/indutny/bn.js | BN}.
  *
  * @category beet/primitive
  */
-export const u128: FixedSizeBeet<bignum> = unsignedLargeBeet(16, 'u128')
+export const u128: FixedSizeBeet<bignum> = unsignedLargeBeet(16, "u128");
 /**
  * De/Serializer for 256-bit unsigned integers aka `u256` which serializes to a JavaScript
  * _BigNum_ via {@link https://github.com/indutny/bn.js | BN}.
  *
  * @category beet/primitive
  */
-export const u256: FixedSizeBeet<bignum> = unsignedLargeBeet(32, 'u256')
+export const u256: FixedSizeBeet<bignum> = unsignedLargeBeet(32, "u256");
 /**
  * De/Serializer for 512-bit unsigned integers aka `u512` which serializes to a JavaScript
  * _BigNum_ via {@link https://github.com/indutny/bn.js | BN}.
  *
  * @category beet/primitive
  */
-export const u512: FixedSizeBeet<bignum> = unsignedLargeBeet(64, 'u512')
+export const u512: FixedSizeBeet<bignum> = unsignedLargeBeet(64, "u512");
 
 // -----------------
 // Signed
@@ -111,14 +111,14 @@ export const u512: FixedSizeBeet<bignum> = unsignedLargeBeet(64, 'u512')
  */
 export const i8: FixedSizeBeet<number> = {
   write: function (buf: Buffer, offset: number, value: number) {
-    buf.writeInt8(value, offset)
+    buf.writeInt8(value, offset);
   },
   read: function (buf: Buffer, offset: number): number {
-    return buf.readInt8(offset)
+    return buf.readInt8(offset);
   },
   byteSize: 1,
-  description: 'i8',
-}
+  description: "i8",
+};
 
 /**
  * De/Serializer 16-bit signed integers aka `i16`.
@@ -127,14 +127,14 @@ export const i8: FixedSizeBeet<number> = {
  */
 export const i16: FixedSizeBeet<number> = {
   write: function (buf: Buffer, offset: number, value: number) {
-    buf.writeInt16LE(value, offset)
+    buf.writeInt16LE(value, offset);
   },
   read: function (buf: Buffer, offset: number): number {
-    return buf.readInt16LE(offset)
+    return buf.readInt16LE(offset);
   },
   byteSize: 2,
-  description: 'i16',
-}
+  description: "i16",
+};
 
 /**
  * De/Serializer 32-bit signed integers aka `i32`.
@@ -143,32 +143,32 @@ export const i16: FixedSizeBeet<number> = {
  */
 export const i32: FixedSizeBeet<number> = {
   write: function (buf: Buffer, offset: number, value: number) {
-    buf.writeInt32LE(value, offset)
+    buf.writeInt32LE(value, offset);
   },
   read: function (buf: Buffer, offset: number): number {
-    return buf.readInt32LE(offset)
+    return buf.readInt32LE(offset);
   },
   byteSize: 4,
-  description: 'i32',
-}
+  description: "i32",
+};
 
 function signedLargeBeet(byteSize: number, description: string) {
-  const bitSize = byteSize * 8
+  const bitSize = byteSize * 8;
   return {
     write: function (buf: Buffer, offset: number, value: bignum) {
-      const bn = (BN.isBN(value) ? value : new BN(value)).toTwos(bitSize)
-      const bytesArray = bn.toArray('le', this.byteSize)
-      const bytesArrayBuf = Buffer.from(bytesArray)
-      bytesArrayBuf.copy(buf, offset, 0, this.byteSize)
+      const bn = (BN.isBN(value) ? value : new BN(value)).toTwos(bitSize);
+      const bytesArray = bn.toArray("le", this.byteSize);
+      const bytesArrayBuf = Buffer.from(bytesArray);
+      bytesArrayBuf.copy(buf, offset, 0, this.byteSize);
     },
     read: function (buf: Buffer, offset: number): bignum {
-      const slice = buf.slice(offset, offset + this.byteSize)
-      const x = new BN(slice, 'le')
-      return x.fromTwos(bitSize)
+      const slice = buf.slice(offset, offset + this.byteSize);
+      const x = new BN(slice, "le");
+      return x.fromTwos(bitSize);
     },
     byteSize,
     description,
-  }
+  };
 }
 
 /**
@@ -177,28 +177,28 @@ function signedLargeBeet(byteSize: number, description: string) {
  *
  * @category beet/primitive
  */
-export const i64: FixedSizeBeet<bignum> = signedLargeBeet(8, 'i64')
+export const i64: FixedSizeBeet<bignum> = signedLargeBeet(8, "i64");
 /**
  * De/Serializer for 128-bit signed integers aka `i128` which serializes to a JavaScript
  * _BigNum_ via {@link https://github.com/indutny/bn.js | BN}.
  *
  * @category beet/primitive
  */
-export const i128: FixedSizeBeet<bignum> = signedLargeBeet(16, 'i128')
+export const i128: FixedSizeBeet<bignum> = signedLargeBeet(16, "i128");
 /**
  * De/Serializer for 256-bit signed integers aka `i256` which serializes to a JavaScript
  * _BigNum_ via {@link https://github.com/indutny/bn.js | BN}.
  *
  * @category beet/primitive
  */
-export const i256: FixedSizeBeet<bignum> = signedLargeBeet(32, 'i256')
+export const i256: FixedSizeBeet<bignum> = signedLargeBeet(32, "i256");
 /**
  * De/Serializer for 512-bit signed integers aka `i512` which serializes to a JavaScript
  * _BigNum_ via {@link https://github.com/indutny/bn.js | BN}.
  *
  * @category beet/primitive
  */
-export const i512: FixedSizeBeet<bignum> = signedLargeBeet(64, 'i512')
+export const i512: FixedSizeBeet<bignum> = signedLargeBeet(64, "i512");
 
 // -----------------
 // Boolean
@@ -210,46 +210,46 @@ export const i512: FixedSizeBeet<bignum> = signedLargeBeet(64, 'i512')
  */
 export const bool: FixedSizeBeet<boolean> = {
   write: function (buf: Buffer, offset: number, value: boolean): void {
-    const n = value ? 1 : 0
-    u8.write(buf, offset, n)
+    const n = value ? 1 : 0;
+    u8.write(buf, offset, n);
   },
   read: function (buf: Buffer, offset: number): boolean {
-    return u8.read(buf, offset) === 1
+    return u8.read(buf, offset) === 1;
   },
   byteSize: 1,
-  description: 'bool',
-}
+  description: "bool",
+};
 
 /**
  * @category TypeDefinition
  */
-export type NumbersExports = keyof typeof import('./numbers')
+export type NumbersExports = keyof typeof import("./numbers");
 /**
  * @category TypeDefinition
  */
 export type NumbersTypeMapKey =
-  | 'u8'
-  | 'u16'
-  | 'u32'
-  | 'u64'
-  | 'u128'
-  | 'u256'
-  | 'u512'
-  | 'i8'
-  | 'i16'
-  | 'i32'
-  | 'i64'
-  | 'i128'
-  | 'i256'
-  | 'i512'
-  | 'bool'
+  | "u8"
+  | "u16"
+  | "u32"
+  | "u64"
+  | "u128"
+  | "u256"
+  | "u512"
+  | "i8"
+  | "i16"
+  | "i32"
+  | "i64"
+  | "i128"
+  | "i256"
+  | "i512"
+  | "bool";
 /**
  * @category TypeDefinition
  */
 export type NumbersTypeMap = Record<
   NumbersTypeMapKey,
   SupportedTypeDefinition & { beet: NumbersExports }
->
+>;
 
 /**
  * Maps primitive beet exports to metadata which describes in which package it
