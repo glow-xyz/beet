@@ -1,6 +1,5 @@
 import { Buffer } from "buffer";
 import test from "tape";
-// @ts-ignore
 import { inspect } from "util";
 import { Beet, FixableBeet, FixedSizeBeet } from "../../src/beet";
 
