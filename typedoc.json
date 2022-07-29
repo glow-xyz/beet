@@ -1,8 +1,0 @@
-{
-  "entryPoints": ["src/beet.ts"],
-  "excludePrivate": true,
-  "categorizeByGroup": false,
-  "readme": "none",
-  "emit": "both",
-  "out": "../docs/beet"
-}
