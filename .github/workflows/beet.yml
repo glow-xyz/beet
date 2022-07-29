@@ -23,4 +23,4 @@ jobs:
     - name: TSC
       run: pnpm run tsc
     - name: Test
-      run: pnpm exec tsc -p tsconfig.test.json && pnpm run test
+      run: pnpm run test
