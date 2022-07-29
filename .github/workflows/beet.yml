@@ -24,5 +24,3 @@ jobs:
         run: pnpm run tsc
       - name: Test in Node.js
         run: pnpm run test
-      - name: Test in browser environment
-        run: pnpm run test:browser
