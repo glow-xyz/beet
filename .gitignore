@@ -1,9 +1,6 @@
 dist/
 .idea/
 yarn.lock
-docs
-tools/bsamples/target/
-tools/bsamples/Cargo.lock
 node_modules
 
 # dotenv environment variables file (build for Zeit Now)
@@ -45,6 +42,7 @@ dump.rdb
 .obsidian
 
 dist/
+dist-test/
 
 .turbo
 build/**
