@@ -18,16 +18,11 @@
     "postpublish": "git push origin && git push origin --tags",
     "build": "rimraf dist && tsc -p tsconfig.json && tsc -p tsconfig.esm.json",
     "pretest": "yarn build",
-    "test": "NODE_OPTIONS='--loader ts-node/esm/transpile-only' tape ./test/{unit,compat}/*.ts",
+    "test": "tape dist/cjs/test/{unit,compat}/*.js",
     "test:browser": "airtap ./test/{unit,compat}/*.ts",
-    "bsamples": "cd ../tools/bsamples && cargo run",
-    "tsc": "tsc --noEmit",
-    "doc": "rimraf ../docs/beet && typedoc",
-    "doc:update": "./sh/update-docs",
-    "doctoc": "doctoc README.md"
+    "tsc": "tsc --noEmit"
   },
   "repository": "git@github.com:glow-xyz/beet.git",
-  "author": "Thorsten Lorenz <thlorenz@gmx.de>",
   "license": "Apache-2.0",
   "directories": {
     "dist": "./dist"
@@ -58,7 +53,6 @@
     "spok": "^1.4.3",
     "supports-color": "^8.1.1",
     "tape": "^5.3.2",
-    "ts-node": "10.9.1",
     "tsify": "^5.0.4",
     "typedoc": "^0.22.10",
     "typescript": "^4.5.2"
