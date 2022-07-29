@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer'
+import { Buffer } from "buffer";
 import {
   assertFixedSizeBeet,
   Beet,
@@ -6,10 +6,10 @@ import {
   FixableBeet,
   FixedSizeBeet,
   SupportedTypeDefinition,
-} from '../types'
-import { BEET_PACKAGE } from '../types'
-import { logTrace } from '../utils'
-import { fixBeetFromData, fixBeetFromValue } from '../beet.fixable'
+} from "../types";
+import { BEET_PACKAGE } from "../types";
+import { logTrace } from "../utils";
+import { fixBeetFromData, fixBeetFromValue } from "../beet.fixable";
 
 /**
  * Represents the Rust Option type {@link T}.
@@ -18,23 +18,23 @@ import { fixBeetFromData, fixBeetFromValue } from '../beet.fixable'
  *
  * @category beet/option
  */
-export type COption<T> = T | null
+export type COption<T> = T | null;
 
-const NONE = 0
-const SOME = 1
+const NONE = 0;
+const SOME = 1;
 
 /**
  * @private
  */
 export function isSomeBuffer(buf: Buffer, offset: number) {
-  return buf[offset] === SOME
+  return buf[offset] === SOME;
 }
 
 /**
  * @private
  */
 export function isNoneBuffer(buf: Buffer, offset: number) {
-  return buf[offset] === NONE
+  return buf[offset] === NONE;
 }
 
 /**
@@ -50,25 +50,25 @@ export function isNoneBuffer(buf: Buffer, offset: number) {
  * @category beet/option
  */
 export function coptionNone<T>(description: string): FixedSizeBeet<COption<T>> {
-  logTrace(`coptionNone(${description})`)
+  logTrace(`coptionNone(${description})`);
   return {
     write: function (buf: Buffer, offset: number, value: COption<T>) {
       if (value != null) {
-        throw new Error('coptionNone can only handle `null` values')
+        throw new Error("coptionNone can only handle `null` values");
       }
-      buf[offset] = NONE
+      buf[offset] = NONE;
     },
 
     read: function (buf: Buffer, offset: number): COption<T> {
       if (!isNoneBuffer(buf, offset)) {
-        throw new Error('coptionNone can only handle `NONE` data')
+        throw new Error("coptionNone can only handle `NONE` data");
       }
-      return null
+      return null;
     },
 
     byteSize: 1,
     description: `COption<None(${description})>`,
-  }
+  };
 }
 
 /**
@@ -86,39 +86,39 @@ export function coptionNone<T>(description: string): FixedSizeBeet<COption<T>> {
 export function coptionSome<T>(
   inner: FixedSizeBeet<T>
 ): FixedSizeBeet<COption<T>> {
-  const byteSize = 1 + inner.byteSize
+  const byteSize = 1 + inner.byteSize;
 
   const beet = {
     write: function (buf: Buffer, offset: number, value: COption<T>) {
       assertFixedSizeBeet(
         inner,
         `coption inner type ${inner.description} needs to be fixed before calling write`
-      )
+      );
       if (value == null) {
-        throw new Error('coptionSome cannot handle `null` values')
+        throw new Error("coptionSome cannot handle `null` values");
       }
-      buf[offset] = SOME
-      inner.write(buf, offset + 1, value)
+      buf[offset] = SOME;
+      inner.write(buf, offset + 1, value);
     },
 
     read: function (buf: Buffer, offset: number): COption<T> {
       assertFixedSizeBeet(
         inner,
         `coption inner type ${inner.description} needs to be fixed before calling read`
-      )
+      );
       if (!isSomeBuffer(buf, offset)) {
-        throw new Error('coptionSome can only handle `SOME` data')
+        throw new Error("coptionSome can only handle `SOME` data");
       }
-      return inner.read(buf, offset + 1)
+      return inner.read(buf, offset + 1);
     },
 
     description: `COption<${inner.description}>[1 + ${inner.byteSize}]`,
     byteSize,
 
     inner,
-  }
-  logTrace(beet.description)
-  return beet
+  };
+  logTrace(beet.description);
+  return beet;
 }
 
 /**
@@ -137,41 +137,41 @@ export function coption<T, V = T>(inner: Beet<T, V>): FixableBeet<COption<T>> {
   return {
     toFixedFromData(buf: Buffer, offset: number) {
       if (isSomeBuffer(buf, offset)) {
-        const innerFixed = fixBeetFromData(inner, buf, offset + 1)
-        return coptionSome(innerFixed)
+        const innerFixed = fixBeetFromData(inner, buf, offset + 1);
+        return coptionSome(innerFixed);
       } else {
         if (!isNoneBuffer(buf, offset)) {
-          throw new Error(`Expected ${buf} to hold a COption`)
+          throw new Error(`Expected ${buf} to hold a COption`);
         }
-        return coptionNone(inner.description)
+        return coptionNone(inner.description);
       }
     },
 
     toFixedFromValue(val: V | Partial<COption<T>>) {
       return val == null
         ? coptionNone(inner.description)
-        : coptionSome(fixBeetFromValue(inner, val as V))
+        : coptionSome(fixBeetFromValue(inner, val as V));
     },
 
     description: `COption<${inner.description}>`,
-  }
+  };
 }
 
 /**
  * @category TypeDefinition
  */
-export type CompositesExports = keyof typeof import('./composites')
+export type CompositesExports = keyof typeof import("./composites");
 /**
  * @category TypeDefinition
  */
-export type CompositesTypeMapKey = 'option'
+export type CompositesTypeMapKey = "option";
 /**
  * @category TypeDefinition
  */
 export type CompositesTypeMap = Record<
   CompositesTypeMapKey,
   SupportedTypeDefinition & { beet: CompositesExports }
->
+>;
 
 /**
  * Maps composite beet exports to metadata which describes in which package it
@@ -182,11 +182,11 @@ export type CompositesTypeMap = Record<
  */
 export const compositesTypeMap: CompositesTypeMap = {
   option: {
-    beet: 'coption',
+    beet: "coption",
     isFixable: true,
     sourcePack: BEET_PACKAGE,
-    ts: 'COption<Inner>',
+    ts: "COption<Inner>",
     arg: BEET_TYPE_ARG_INNER,
     pack: BEET_PACKAGE,
   },
-}
+};

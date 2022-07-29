@@ -11,15 +11,14 @@
     "require": "./dist/cjs/beet.js"
   },
   "scripts": {
-    "check:publish-ready": "yarn build && yarn test",
-    "preversion": "yarn check:publish-ready",
+    "check:publish-ready": "pnpm build && pnpm test",
+    "preversion": "pnpm check:publish-ready",
     "postversion": "git add package.json && git commit -m \"chore: update $npm_package_name to v$npm_package_version\" && git tag $npm_package_name@$npm_package_version",
-    "prepublishOnly": "yarn check:publish-ready",
+    "prepublishOnly": "pnpm check:publish-ready",
     "postpublish": "git push origin && git push origin --tags",
     "build": "rimraf dist && tsc -p tsconfig.json && tsc -p tsconfig.esm.json",
-    "pretest": "yarn build",
-    "test": "tape dist-test/cjs/test/{unit,compat}/*.js",
-    "test:browser": "airtap ./test/{unit,compat}/*.ts",
+    "pretest": "pnpm build && tsc -p tsconfig.test.json",
+    "test": "pnpm pretest && tape dist-test/cjs/test/{unit,compat}/*.js",
     "tsc": "tsc --noEmit"
   },
   "repository": "git@github.com:glow-xyz/beet.git",
@@ -33,28 +32,20 @@
     "dist/types/*"
   ],
   "dependencies": {
-    "ansicolors": "^0.3.2",
     "bn.js": "^5.2.0",
     "buffer": "^6.0.3",
     "debug": "^4.3.3"
   },
   "devDependencies": {
-    "@types/ansicolors": "^0.0.33",
     "@types/bn.js": "^5.1.0",
     "@types/debug": "^4.1.7",
     "@types/node": "^18.6.2",
     "@types/tape": "^4.13.2",
-    "airtap": "^4.0.4",
-    "airtap-system": "^0.1.0",
     "browserify": "^17.0.0",
-    "doctoc": "^2.1.0",
-    "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "spok": "^1.4.3",
     "supports-color": "^8.1.1",
     "tape": "^5.3.2",
-    "tsify": "^5.0.4",
-    "typedoc": "^0.22.10",
     "typescript": "^4.5.2",
     "util": "^0.12.4"
   },

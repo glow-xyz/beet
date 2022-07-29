@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer'
+import { Buffer } from "buffer";
 import {
   BEET_TYPE_ARG_LEN,
   FixedSizeBeet,
@@ -6,11 +6,11 @@ import {
   ElementCollectionBeet,
   FixableBeet,
   Beet,
-} from '../types'
-import { u32 } from './numbers'
-import { BEET_PACKAGE } from '../types'
-import { logTrace } from '../utils'
-import { fixBeetFromData, fixBeetFromValue } from '../beet.fixable'
+} from "../types";
+import { u32 } from "./numbers";
+import { BEET_PACKAGE } from "../types";
+import { logTrace } from "../utils";
+import { fixBeetFromData, fixBeetFromValue } from "../beet.fixable";
 
 /**
  * De/Serializes an array with a specific number of elements of type {@link T}
@@ -30,45 +30,45 @@ export function uniformFixedSizeArray<T, V = Partial<T>>(
   len: number,
   lenPrefix: boolean = false
 ): ElementCollectionBeet & FixedSizeBeet<T[], V[]> {
-  const arraySize = element.byteSize * len
-  const byteSize = lenPrefix ? 4 + arraySize : arraySize
+  const arraySize = element.byteSize * len;
+  const byteSize = lenPrefix ? 4 + arraySize : arraySize;
 
   return {
     write: function (buf: Buffer, offset: number, value: V[]): void {
       if (value.length !== len) {
-        throw Error(`array length ${value.length} should match len ${len}`)
+        throw Error(`array length ${value.length} should match len ${len}`);
       }
 
       if (lenPrefix) {
-        u32.write(buf, offset, len)
-        offset += 4
+        u32.write(buf, offset, len);
+        offset += 4;
       }
 
       for (let i = 0; i < len; i++) {
-        element.write(buf, offset + i * element.byteSize, value[i])
+        element.write(buf, offset + i * element.byteSize, value[i]);
       }
     },
 
     read: function (buf: Buffer, offset: number): T[] {
       if (lenPrefix) {
-        const size = u32.read(buf, offset)
+        const size = u32.read(buf, offset);
         if (size !== len) {
-          throw new Error('invalid byte size')
+          throw new Error("invalid byte size");
         }
-        offset += 4
+        offset += 4;
       }
-      const arr: T[] = new Array(len)
+      const arr: T[] = new Array(len);
       for (let i = 0; i < len; i++) {
-        arr[i] = element.read(buf, offset + i * element.byteSize)
+        arr[i] = element.read(buf, offset + i * element.byteSize);
       }
-      return arr
+      return arr;
     },
     byteSize,
     length: len,
     elementByteSize: element.byteSize,
     lenPrefixByteSize: 4,
     description: `Array<${element.description}>(${len})`,
-  }
+  };
 }
 
 /**
@@ -86,43 +86,43 @@ export function fixedSizeArray<T, V = Partial<T>>(
   elements: FixedSizeBeet<T, V>[],
   elementsByteSize: number
 ): FixedSizeBeet<T[], V[]> {
-  const len = elements.length
-  const firstElement = len === 0 ? '<EMPTY>' : elements[0].description
+  const len = elements.length;
+  const firstElement = len === 0 ? "<EMPTY>" : elements[0].description;
 
   return {
     write: function (buf: Buffer, offset: number, value: V[]): void {
       if (value.length !== value.length) {
-        throw new Error(`array length ${value.length} should match len ${len}`)
+        throw new Error(`array length ${value.length} should match len ${len}`);
       }
-      u32.write(buf, offset, len)
+      u32.write(buf, offset, len);
 
-      let cursor = offset + 4
+      let cursor = offset + 4;
       for (let i = 0; i < len; i++) {
-        const element = elements[i]
-        element.write(buf, cursor, value[i])
-        cursor += element.byteSize
+        const element = elements[i];
+        element.write(buf, cursor, value[i]);
+        cursor += element.byteSize;
       }
     },
 
     read: function (buf: Buffer, offset: number): T[] {
-      const size = u32.read(buf, offset)
+      const size = u32.read(buf, offset);
       if (size !== len) {
-        throw new Error('invalid byte size')
+        throw new Error("invalid byte size");
       }
 
-      let cursor = offset + 4
-      const arr: T[] = new Array(len)
+      let cursor = offset + 4;
+      const arr: T[] = new Array(len);
       for (let i = 0; i < len; i++) {
-        const element = elements[i]
-        arr[i] = element.read(buf, cursor)
-        cursor += element.byteSize
+        const element = elements[i];
+        arr[i] = element.read(buf, cursor);
+        cursor += element.byteSize;
       }
-      return arr
+      return arr;
     },
     byteSize: 4 + elementsByteSize,
     length: len,
     description: `Array<${firstElement}>(${len})[ 4 + ${elementsByteSize} ]`,
-  }
+  };
 }
 
 /**
@@ -140,39 +140,39 @@ export function array<T, V = Partial<T>>(
 ): FixableBeet<T[], V[]> {
   return {
     toFixedFromData(buf: Buffer, offset: number): FixedSizeBeet<T[], V[]> {
-      const len = u32.read(buf, offset)
-      logTrace(`${this.description}[${len}]`)
+      const len = u32.read(buf, offset);
+      logTrace(`${this.description}[${len}]`);
 
-      const cursorStart = offset + 4
-      let cursor = cursorStart
+      const cursorStart = offset + 4;
+      let cursor = cursorStart;
 
-      const fixedElements: FixedSizeBeet<T, V>[] = new Array(len)
+      const fixedElements: FixedSizeBeet<T, V>[] = new Array(len);
       for (let i = 0; i < len; i++) {
-        const fixedElement = fixBeetFromData(element, buf, cursor)
-        fixedElements[i] = fixedElement
-        cursor += fixedElement.byteSize
+        const fixedElement = fixBeetFromData(element, buf, cursor);
+        fixedElements[i] = fixedElement;
+        cursor += fixedElement.byteSize;
       }
-      return fixedSizeArray(fixedElements, cursor - cursorStart)
+      return fixedSizeArray(fixedElements, cursor - cursorStart);
     },
 
     toFixedFromValue(vals: V[]): FixedSizeBeet<T[], V[]> {
       if (!Array.isArray(vals)) {
-        throw new Error(`${vals} should be an array`)
+        throw new Error(`${vals} should be an array`);
       }
 
-      let elementsSize = 0
-      const fixedElements: FixedSizeBeet<T, V>[] = new Array(vals.length)
+      let elementsSize = 0;
+      const fixedElements: FixedSizeBeet<T, V>[] = new Array(vals.length);
 
       for (let i = 0; i < vals.length; i++) {
-        const fixedElement = fixBeetFromValue(element, vals[i])
-        fixedElements[i] = fixedElement
-        elementsSize += fixedElement.byteSize
+        const fixedElement = fixBeetFromValue(element, vals[i]);
+        fixedElements[i] = fixedElement;
+        elementsSize += fixedElement.byteSize;
       }
-      return fixedSizeArray(fixedElements, elementsSize)
+      return fixedSizeArray(fixedElements, elementsSize);
     },
 
     description: `array`,
-  }
+  };
 }
 
 /**
@@ -185,15 +185,15 @@ export function array<T, V = Partial<T>>(
 export function fixedSizeBuffer(bytes: number): FixedSizeBeet<Buffer> {
   return {
     write: function (buf: Buffer, offset: number, value: Buffer): void {
-      value.copy(buf, offset, 0, bytes)
+      value.copy(buf, offset, 0, bytes);
     },
     read: function (buf: Buffer, offset: number): Buffer {
-      return buf.slice(offset, offset + bytes)
+      return buf.slice(offset, offset + bytes);
     },
 
     byteSize: bytes,
     description: `Buffer(${bytes})`,
-  }
+  };
 }
 
 /**
@@ -206,38 +206,38 @@ export function fixedSizeUint8Array(
   len: number,
   lenPrefix: boolean = false
 ): FixedSizeBeet<Uint8Array> {
-  const arrayBufferBeet = fixedSizeBuffer(len)
-  const byteSize = lenPrefix ? len + 4 : len
+  const arrayBufferBeet = fixedSizeBuffer(len);
+  const byteSize = lenPrefix ? len + 4 : len;
   return {
     write: function (buf: Buffer, offset: number, value: Uint8Array): void {
       if (value.byteLength !== len) {
         throw new Error(
           `Uint8Array length ${value.byteLength} should match len ${len}`
-        )
+        );
       }
 
       if (lenPrefix) {
-        u32.write(buf, offset, len)
-        offset += 4
+        u32.write(buf, offset, len);
+        offset += 4;
       }
-      const valueBuf = Buffer.from(value)
-      arrayBufferBeet.write(buf, offset, valueBuf)
+      const valueBuf = Buffer.from(value);
+      arrayBufferBeet.write(buf, offset, valueBuf);
     },
     read: function (buf: Buffer, offset: number): Uint8Array {
       if (lenPrefix) {
-        const size = u32.read(buf, offset)
+        const size = u32.read(buf, offset);
         if (size !== len) {
-          throw new Error('invalid byte size')
+          throw new Error("invalid byte size");
         }
-        offset += 4
+        offset += 4;
       }
-      const arrayBuffer = arrayBufferBeet.read(buf, offset)
-      return Uint8Array.from(arrayBuffer)
+      const arrayBuffer = arrayBufferBeet.read(buf, offset);
+      return Uint8Array.from(arrayBuffer);
     },
 
     byteSize,
     description: `Uint8Array(${len})`,
-  }
+  };
 }
 
 /**
@@ -251,41 +251,41 @@ export const uint8Array: FixableBeet<Uint8Array, Uint8Array> = {
     buf: Buffer,
     offset: number
   ): FixedSizeBeet<Uint8Array, Uint8Array> {
-    const len = u32.read(buf, offset)
-    logTrace(`${this.description}[${len}]`)
+    const len = u32.read(buf, offset);
+    logTrace(`${this.description}[${len}]`);
 
-    return fixedSizeUint8Array(len, true)
+    return fixedSizeUint8Array(len, true);
   },
 
   toFixedFromValue(val: Uint8Array): FixedSizeBeet<Uint8Array, Uint8Array> {
-    const len = val.byteLength
-    return fixedSizeUint8Array(len, true)
+    const len = val.byteLength;
+    return fixedSizeUint8Array(len, true);
   },
 
   description: `Uint8Array`,
-}
+};
 
 /**
  * @category TypeDefinition
  */
-export type CollectionsExports = keyof typeof import('./collections')
+export type CollectionsExports = keyof typeof import("./collections");
 /**
  * @category TypeDefinition
  */
 export type CollectionsTypeMapKey =
-  | 'Array'
-  | 'FixedSizeArray'
-  | 'UniformFixedSizeArray'
-  | 'Buffer'
-  | 'FixedSizeUint8Array'
-  | 'Uint8Array'
+  | "Array"
+  | "FixedSizeArray"
+  | "UniformFixedSizeArray"
+  | "Buffer"
+  | "FixedSizeUint8Array"
+  | "Uint8Array";
 /**
  * @category TypeDefinition
  */
 export type CollectionsTypeMap = Record<
   CollectionsTypeMapKey,
   SupportedTypeDefinition & { beet: CollectionsExports }
->
+>;
 
 /**
  * Maps collections beet exports to metadata which describes in which package it
@@ -296,45 +296,45 @@ export type CollectionsTypeMap = Record<
  */
 export const collectionsTypeMap: CollectionsTypeMap = {
   Array: {
-    beet: 'array',
+    beet: "array",
     isFixable: true,
     sourcePack: BEET_PACKAGE,
-    ts: 'Array',
+    ts: "Array",
     arg: BEET_TYPE_ARG_LEN,
   },
   FixedSizeArray: {
-    beet: 'fixedSizeArray',
+    beet: "fixedSizeArray",
     isFixable: false,
     sourcePack: BEET_PACKAGE,
-    ts: 'Array',
+    ts: "Array",
     arg: BEET_TYPE_ARG_LEN,
   },
   UniformFixedSizeArray: {
-    beet: 'uniformFixedSizeArray',
+    beet: "uniformFixedSizeArray",
     isFixable: false,
     sourcePack: BEET_PACKAGE,
-    ts: 'Array',
+    ts: "Array",
     arg: BEET_TYPE_ARG_LEN,
   },
   Buffer: {
-    beet: 'fixedSizeBuffer',
+    beet: "fixedSizeBuffer",
     isFixable: false,
     sourcePack: BEET_PACKAGE,
-    ts: 'Buffer',
+    ts: "Buffer",
     arg: BEET_TYPE_ARG_LEN,
   },
   FixedSizeUint8Array: {
-    beet: 'fixedSizeUint8Array',
+    beet: "fixedSizeUint8Array",
     isFixable: false,
     sourcePack: BEET_PACKAGE,
-    ts: 'Uint8Array',
+    ts: "Uint8Array",
     arg: BEET_TYPE_ARG_LEN,
   },
   Uint8Array: {
-    beet: 'uint8Array',
+    beet: "uint8Array",
     isFixable: true,
     sourcePack: BEET_PACKAGE,
-    ts: 'Uint8Array',
+    ts: "Uint8Array",
     arg: BEET_TYPE_ARG_LEN,
   },
-}
+};
