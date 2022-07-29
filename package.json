@@ -18,7 +18,6 @@
     "postpublish": "git push origin && git push origin --tags",
     "build": "rimraf dist && tsc -p tsconfig.json && tsc -p tsconfig.esm.json",
     "test": "tape dist-test/cjs/test/{unit,compat}/*.js",
-    "test:browser": "airtap ./test/{unit,compat}/*.ts",
     "pretest": "pnpm build && tsc -p tsconfig.test.json",
     "tsc": "tsc --noEmit"
   },
@@ -55,8 +54,7 @@
     "tape": "^5.3.2",
     "tsify": "^5.0.4",
     "typedoc": "^0.22.10",
-    "typescript": "^4.5.2",
-    "util": "^0.12.4"
+    "typescript": "^4.5.2"
   },
   "pnpm": {
     "patchedDependencies": {
