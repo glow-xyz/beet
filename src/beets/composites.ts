@@ -1,15 +1,15 @@
 import { Buffer } from "buffer";
+import { fixBeetFromData, fixBeetFromValue } from "../beet.fixable";
 import {
   assertFixedSizeBeet,
   Beet,
+  BEET_PACKAGE,
   BEET_TYPE_ARG_INNER,
   FixableBeet,
   FixedSizeBeet,
   SupportedTypeDefinition,
 } from "../types";
-import { BEET_PACKAGE } from "../types";
 import { logTrace } from "../utils";
-import { fixBeetFromData, fixBeetFromValue } from "../beet.fixable";
 
 /**
  * Represents the Rust Option type {@link T}.
@@ -133,24 +133,28 @@ export function coptionSome<T>(
  *
  * @category beet/composite
  */
-export function coption<T, V = T>(inner: Beet<T, V>): FixableBeet<COption<T>> {
+export function coption<T>(
+  inner: Beet<T, T>
+): FixableBeet<COption<T>, COption<T>> {
   return {
-    toFixedFromData(buf: Buffer, offset: number) {
+    toFixedFromData(buf: Buffer, offset: number): FixedSizeBeet<COption<T>> {
       if (isSomeBuffer(buf, offset)) {
         const innerFixed = fixBeetFromData(inner, buf, offset + 1);
-        return coptionSome(innerFixed);
-      } else {
-        if (!isNoneBuffer(buf, offset)) {
-          throw new Error(`Expected ${buf} to hold a COption`);
-        }
-        return coptionNone(inner.description);
+        return coptionSome(innerFixed as FixedSizeBeet<T>);
       }
+
+      if (!isNoneBuffer(buf, offset)) {
+        throw new Error(`Expected ${buf} to hold a COption`);
+      }
+      return coptionNone(inner.description);
     },
 
-    toFixedFromValue(val: V | Partial<COption<T>>) {
+    toFixedFromValue(
+      val: COption<T>
+    ): FixedSizeBeet<COption<T>, Partial<COption<T>>> {
       return val == null
         ? coptionNone(inner.description)
-        : coptionSome(fixBeetFromValue(inner, val as V));
+        : coptionSome(fixBeetFromValue(inner, val));
     },
 
     description: `COption<${inner.description}>`,

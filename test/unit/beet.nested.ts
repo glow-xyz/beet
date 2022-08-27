@@ -1,5 +1,5 @@
-import spok, { Specifications } from "spok";
 import { Buffer } from "buffer";
+import spok, { Specifications } from "spok";
 import test from "tape";
 import { array, utf8String } from "../../src/beet";
 import { coption } from "../../src/beets/composites";
@@ -47,7 +47,7 @@ function verify<T, V>(
     stringifyElements(deserializedArgs);
     t.deepEqual(deserializedArgs, args, "round-tripped");
   } else {
-    spok(t, deserializedArgs, { ...args, $topic: "round-tripped" });
+    spok(t, deserializedArgs, { ...(args as any), $topic: "round-tripped" });
   }
 }
 

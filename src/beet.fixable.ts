@@ -1,5 +1,5 @@
-import { Buffer } from "buffer";
-import { Beet, isFixableBeet, isFixedSizeBeet } from "./types";
+import {Buffer} from "buffer";
+import {Beet, isFixableBeet, isFixedSizeBeet} from "./types";
 
 /**
  * Converts the provided beet into a {@link FixedBeet} unless it already is.
@@ -22,7 +22,7 @@ export function fixBeetFromData<T, V = Partial<T>>(
   if (isFixableBeet(beet)) {
     return beet.toFixedFromData(buf, offset);
   }
-  throw new Error(`${beet.description} is neither fixed size nor fixable`);
+  throw new Error(`${beet['description']} is neither fixed size nor fixable`);
 }
 
 /**
@@ -41,5 +41,5 @@ export function fixBeetFromValue<T, V = Partial<T>>(beet: Beet<T, V>, val: V) {
   if (isFixableBeet(beet)) {
     return beet.toFixedFromValue(val);
   }
-  throw new Error(`${beet.description} is neither fixed size nor fixable`);
+  throw new Error(`${beet['description']} is neither fixed size nor fixable`);
 }
