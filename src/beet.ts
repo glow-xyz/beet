@@ -1,4 +1,8 @@
-import { SupportedTypeDefinition } from "./types";
+import {
+  AliasesExports,
+  aliasesTypeMap,
+  AliasesTypeMapKey,
+} from "./beets/aliases";
 import {
   CollectionsExports,
   collectionsTypeMap,
@@ -15,18 +19,12 @@ import {
   NumbersTypeMapKey,
 } from "./beets/numbers";
 import { StringExports, stringTypeMap, StringTypeMapKey } from "./beets/string";
-import { EnumsExports, enumsTypeMap, EnumsTypeMapKey } from "./beets/enums";
-import {
-  AliasesExports,
-  aliasesTypeMap,
-  AliasesTypeMapKey,
-} from "./beets/aliases";
+import { SupportedTypeDefinition } from "./types";
 
 export * from "./beets/aliases";
 export * from "./beets/collections";
 export * from "./beets/string";
 export * from "./beets/composites";
-export * from "./beets/enums";
 export * from "./beets/numbers";
 export * from "./beet.fixable";
 export * from "./read-write";
@@ -41,7 +39,6 @@ export type BeetTypeMapKey =
   | CollectionsTypeMapKey
   | StringTypeMapKey
   | CompositesTypeMapKey
-  | EnumsTypeMapKey
   | NumbersTypeMapKey
   | AliasesTypeMapKey;
 
@@ -52,7 +49,6 @@ export type BeetExports =
   | CollectionsExports
   | StringExports
   | CompositesExports
-  | EnumsExports
   | NumbersExports
   | AliasesExports;
 
@@ -72,7 +68,6 @@ export const supportedTypeMap: Record<
   ...collectionsTypeMap,
   ...stringTypeMap,
   ...compositesTypeMap,
-  ...enumsTypeMap,
   ...numbersTypeMap,
   ...aliasesTypeMap,
 };

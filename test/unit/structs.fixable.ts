@@ -17,9 +17,9 @@ import {
 } from "../../src/beet";
 import { deepLogBeet } from "../utils";
 
-function verify<Args>(
+function verify<Args extends {}>(
   t: test.Test,
-  structOrBeet: FixableBeet<Args> | FixableBeetArgsStruct<Args>,
+  structOrBeet: FixableBeet<Args, Args> | FixableBeetArgsStruct<Args>,
   args: Args,
   expected: Specifications<BeetArgsStruct<Args>>,
   opts: { log?: boolean; argsForRoundTrip?: (args: Args) => Args } = {}
@@ -327,7 +327,7 @@ test("fixable: struct with top level string nested inside other struct", (t) => 
   {
     t.comment("+++ with Some(args)");
     const args = { name: "bob", age: 18 };
-    verify(t, beet, args, <Specifications<typeof beet>>{
+    verify<any>(t, beet, args, <Specifications<typeof beet>>{
       description: "COption<InnerStruct>[1 + 8]",
       byteSize: 9,
       inner: {
@@ -358,7 +358,7 @@ test("fixable: struct with top level string nested inside other struct", (t) => 
   {
     t.comment("+++ with None(args)");
     const args = null;
-    verify(t, beet, args, <Specifications<Beet<InnerArgs>>>{
+    verify<any>(t, beet, args, <Specifications<Beet<InnerArgs>>>{
       byteSize: 1,
       description: "COption<None(InnerStruct)>",
     });

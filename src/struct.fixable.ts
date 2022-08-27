@@ -15,7 +15,7 @@ import { beetBytes, logDebug } from "./utils";
  *
  * @category beet/struct
  */
-export class FixableBeetStruct<Class, Args = Partial<Class>>
+export class FixableBeetStruct<Class, Args extends {} = Partial<Class>>
   implements FixableBeet<Class, Args>
 {
   /**
@@ -132,7 +132,10 @@ export function isFixableBeetStruct(
  *
  * @category beet/struct
  */
-export class FixableBeetArgsStruct<Args> extends FixableBeetStruct<Args, Args> {
+export class FixableBeetArgsStruct<Args extends {}> extends FixableBeetStruct<
+  Args,
+  Args
+> {
   constructor(
     fields: BeetField<Args, any>[],
     description: string = FixableBeetArgsStruct.description

@@ -15,7 +15,7 @@ import { beetBytes, logDebug, logTrace } from "./utils";
  *
  * @category beet/struct
  */
-export class BeetStruct<Class, Args = Partial<Class>>
+export class BeetStruct<Class, Args extends {} = Partial<Class>>
   implements ScalarFixedSizeBeet<Class>
 {
   readonly byteSize: number;
@@ -128,7 +128,7 @@ export function isBeetStruct(beet: any): beet is BeetStruct<any, any> {
  *
  * @category beet/struct
  */
-export class BeetArgsStruct<Args> extends BeetStruct<Args, Args> {
+export class BeetArgsStruct<Args extends {}> extends BeetStruct<Args, Args> {
   constructor(
     fields: FixedBeetField<Args>[],
     description: string = BeetArgsStruct.description

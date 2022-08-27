@@ -1,5 +1,5 @@
-import { Buffer } from "buffer";
 import BN from "bn.js";
+import {Buffer} from "buffer";
 
 /**
  * Matches name in package.json
@@ -221,7 +221,7 @@ export type SupportedTypeDefinition = {
  */
 export function isFixedSizeBeet<T, V = Partial<T>>(
   x: Beet<T, V>
-): x is FixedSizeBeet<T> {
+): x is FixedSizeBeet<T, V> {
   return Object.keys(x).includes("byteSize");
 }
 
